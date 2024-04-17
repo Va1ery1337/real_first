@@ -1,0 +1,95 @@
+#include <iostream>
+#include <ctime>
+
+int rows;
+int cols;
+
+
+
+
+
+void CinArr(int** arr, int rows, int cols) {
+    srand(time(NULL));
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+
+            arr[i][j] = 1 + rand() % 101;
+        }
+
+    }
+
+
+}
+void PrintArr(int** arr, int rows, int cols) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+
+            std::cout << arr[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+
+}
+int** T_arr(int** arr,int rows, int cols) {
+    for (int i = 0; i < (rows*cols); ++i) {
+        int r = i / cols;
+        int c = i % cols;
+        if (c > r) {
+            std::swap(arr[r][c], arr[c][r]);
+        }
+        
+       
+    }
+    
+    return arr;
+}
+    
+
+
+   
+
+
+int main()
+{
+
+    
+    std::cin >> rows >> cols;
+    int** arr = (int**)malloc(rows * sizeof(int*));
+
+    if (arr == NULL) {
+        std::cout << "No memory 1";
+    
+    }
+    for (int i = 0; i < rows; ++i) {
+
+        arr[i] = (int*)malloc(cols * sizeof(int));
+
+        if (arr == NULL) {
+            std::cout << "No memory 2";
+
+        }
+    }
+
+    CinArr(arr,rows,cols);
+    PrintArr(arr, rows, cols);
+    std::cout << "                    " << std::endl;
+    T_arr(arr, rows, cols);
+    PrintArr(arr, rows, cols);
+
+ 
+    
+  
+    
+ 
+   
+
+    for (int i = 0; i < rows; ++i) {
+        free(arr[i]);
+        arr[i] = NULL;
+    }
+    free(arr);
+
+    return 0;
+}
