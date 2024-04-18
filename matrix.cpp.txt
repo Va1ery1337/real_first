@@ -1,0 +1,98 @@
+#include <iostream>
+#include <ctime>
+
+
+class Matrix {
+
+
+private:
+    int** elems;
+    int rows;
+    int cols;
+public:
+    Matrix() :elems(NULL), rows(0), cols(0) {};
+
+    Matrix(int rows, int cols) : rows(rows), cols(cols) {
+        elems = new int* [rows];
+        for (int i = 0; i < rows; ++i) {
+        
+            elems[i] = new int[cols]();
+        }
+    
+    }
+    int& at(int row, int col) {
+    
+        return elems[row][col];
+    }
+    int getRow() {
+    
+        return rows;
+    }
+    int getCol() {
+        return cols;
+    }
+    void setRow(int row) {
+        rows = row;
+    }
+    void setCol(int col) {
+        cols = col;
+    }
+    void Print() {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+
+                std::cout << elems[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+
+
+        std::cout << std::endl;
+    }
+    void Randomize() {
+        srand(time(NULL));
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                elems[i][j] = rand() % 100;
+
+            }
+
+
+        }
+    
+    }
+    Matrix Transpose() {
+        Matrix T_matrix(cols, rows);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                T_matrix.at(j, i) = elems[i][j];
+            
+            }
+        
+        
+        }
+        return T_matrix;
+    
+    
+    }
+
+
+
+
+
+};
+
+int main()
+{
+    Matrix matric(4,4);
+    matric.Randomize();
+    matric.Print();
+    Matrix transposed = matric.Transpose();
+    transposed.Print();
+    
+
+
+    
+}
+
