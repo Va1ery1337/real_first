@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+
+
+class Car {
+
+public:
+    std::string brand = "PAGANI HUAYRA";
+    std::string gearbox = "Robot";
+    std::string color = "Red";
+    std::string interior_color = "Leather";
+    int year = 2012;
+    int mileage = 5000;
+    float engine_volume = 6.0;
+    int engine_cylinders = 12;
+    int horsepower = 850;
+    int max_speed = 370;
+    int doors = 2;
+    
+
+
+    void Car_Info(){
+        std::cout << "Car name          " << brand << std::endl;
+        std::cout << "Transmision       " << gearbox << std::endl;
+        std::cout << "Color             " << color << std::endl;
+        std::cout << "Interior color    " << interior_color << std::endl;
+        std::cout << "Year of issue     " << year << std::endl;
+        std::cout << "Mileage           " << mileage << std::endl;
+        std::cout << "Engine Volume     " << engine_volume << std::endl;
+        std::cout << "Engine Cylinders  " << engine_cylinders << std::endl;
+        std::cout << "Horsepower        " << horsepower << std::endl;
+        std::cout << "Max speed         " << max_speed << "km/h" << std::endl;
+        std::cout << "Number of doors   " << doors << std::endl;
+    
+    
+    }
+
+
+
+
+};
+
+int main()
+{
+    Car Dream_Car;
+    
+    Dream_Car.Car_Info();
+
+
+    
+}
+
