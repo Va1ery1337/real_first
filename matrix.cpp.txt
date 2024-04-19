@@ -81,16 +81,16 @@ public:
             T_matrix[i] = new int[rows];
         }
        
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                T_matrix[j][i] = elems[i][j];
+        for (int i = 0; i < cols; ++i) {
+            for (int j = 0; j < rows; ++j) {
+                T_matrix[i][j] = elems[j][i];
             
             }
         
         
         }
         
-        PrintArr(T_matrix, rows, cols);
+        PrintArr(T_matrix, cols, rows);
 
         for (int i = 0; i < rows; ++i) {
             delete[] T_matrix[i];
@@ -113,7 +113,7 @@ public:
 
 int main()
 {
-    Matrix matric(4,4);
+    Matrix matric(3,4);
     matric.Randomize();
     matric.Print();
     matric.Transpose();
