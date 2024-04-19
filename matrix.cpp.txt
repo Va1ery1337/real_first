@@ -1,6 +1,18 @@
 #include <iostream>
 #include <ctime>
 
+void PrintArr(int** arr, int rows, int cols) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+
+            std::cout << arr[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+
+}
 
 class Matrix {
 
@@ -62,22 +74,33 @@ public:
         }
     
     }
-    Matrix Transpose() {
-        Matrix T_matrix(cols, rows);
+    void Transpose() {
+       int** T_matrix = new int* [cols];
+        for (int i = 0; i < cols; ++i) {
+
+            T_matrix[i] = new int[rows];
+        }
+       
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
-                T_matrix.at(j, i) = elems[i][j];
+                T_matrix[j][i] = elems[i][j];
             
             }
         
         
         }
-        return T_matrix;
-    
+        
+        PrintArr(T_matrix, rows, cols);
+
+        for (int i = 0; i < rows; ++i) {
+            delete[] T_matrix[i];
+        
+        }
+        delete[] T_matrix;
     
     }
 
-~Matrix() {
+    ~Matrix() {
         for (int i = 0; i < rows; ++i) {
             delete[] elems[i];
         }
@@ -93,8 +116,10 @@ int main()
     Matrix matric(4,4);
     matric.Randomize();
     matric.Print();
-    Matrix transposed = matric.Transpose();
-    transposed.Print();
+    matric.Transpose();
+
+    
+    
     
 
 
