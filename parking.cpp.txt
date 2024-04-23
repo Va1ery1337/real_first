@@ -1,0 +1,405 @@
+#include <iostream>
+#include <ctime>
+#include <string>
+
+class Body {
+private:
+	std::string m_body_type="1";
+	std::string m_color="1";
+	int m_doors = 0;
+	std::string* bodies = NULL;
+	std::string* colors = NULL;
+
+public:
+
+	Body() { 
+		std::cout << "### Body default constructor" << std::endl; 
+
+		bodies = new std::string[4];
+		bodies[0] = "Sedan";
+		bodies[1] = "Coupe";
+		bodies[2] = "Off-road";
+		bodies[3] = "Crossover";
+
+		setBodyType(bodies[rand() % 3]);
+
+		colors = new std::string[4];
+		colors[0] = "Black";
+		colors[1] = "White";
+		colors[2] = "Grey";
+		colors[3] = "Wet asphalt";
+
+		setBodyColor(colors[rand() % 3]);
+
+		setDoors(getBodyType());
+
+		
+
+
+
+	
+	
+	};
+
+	Body(std::string body_type, std::string color,int doors):
+		m_body_type(body_type),
+		m_color(color),
+		m_doors(doors)
+	{
+		std::cout << "### Body constructor" << std::endl;
+	}
+
+
+	void print() {
+		std::cout << "___Body INFO___" << std::endl;
+		std::cout << "Body type		" << m_body_type << std::endl;
+		std::cout << "Body color		" << m_color << std::endl;
+		std::cout << "Number of doors		" << m_doors << std::endl;
+	}
+
+	void setBodyType(const std::string& body_type) {
+		m_body_type = body_type;
+	}
+	void setBodyColor(const std::string& color) {
+		m_color = color;
+	}
+	const std::string& getBodyType()const {
+		return m_body_type;
+	}
+	void setDoors(std::string m_body_type) {
+		if (m_body_type != "Coupe") {
+			m_doors = 5;
+		}
+		else {
+			m_doors = 2;
+		}
+		
+	}
+
+	
+	
+	~Body() { std::cout << "### Body destructor" << std::endl; delete[]bodies; delete[]colors; }
+};
+class Interior {
+private:
+	std::string m_upholstery = "1";
+	std::string m_interioor_color = "1";
+	int m_seat = 0;
+	std::string* upholstery = NULL;
+	std::string* interior_colors = NULL;
+
+public:
+	Interior() {
+		std::cout << "### Interior default constructor" << std::endl;
+
+		upholstery = new std::string[4];
+		upholstery[0] = "Textile";
+		upholstery[1] = "Leather";
+		upholstery[2] = "Alcantara";
+		upholstery[3] = "Vinil";
+
+		setUpholstery(upholstery[rand() % 3]);
+
+		interior_colors = new std::string[4];
+		interior_colors[0] = "Black";
+		interior_colors[1] = "Cream";
+		interior_colors[2] = "Red";
+		interior_colors[3] = "Dark Blue";
+
+		setInteriorColor(interior_colors[rand() % 3]);
+		setSeats(4);
+		
+
+	};
+
+	Interior(std::string upholstery, std::string interior_color, int seat) :
+		m_upholstery(upholstery),
+		m_interioor_color(interior_color),
+		m_seat(seat)
+	{
+		std::cout << "### Interiot constructor" << std::endl;
+	}
+
+	~Interior() { std::cout << "### Interior destructor" << std::endl; delete[]upholstery; delete[]interior_colors; }
+
+	void print() {
+		std::cout << "___Interior INFO___" << std::endl << std::endl;
+		std::cout << "Upholstery fabric	" << m_upholstery << std::endl;
+		std::cout << "Interior color		" << m_interioor_color << std::endl;
+		std::cout << "Number of seats		" << m_seat << std::endl;
+	}
+
+	void setUpholstery(const std::string& upholstery){
+		m_upholstery = upholstery;
+	}
+	void setInteriorColor(const std::string& interior_color) {
+		m_interioor_color = interior_color;
+	}
+	void setSeats(int seats) {
+		m_seat = seats;
+	}
+
+
+
+};
+class Engine {
+private:
+	double m_engine_volume = 4.4;
+	int m_engine_pumps = 8;
+	int m_hp = 625;
+	std::string m_fuel_type = "petrol";
+public:
+	Engine() {  std::cout << "### Engine default constructor " << std::endl;  };
+
+	Engine(double engine_volume,int engine_pumps,int hp,std::string fuel_type):
+			m_engine_volume(engine_volume),
+			m_engine_pumps(engine_pumps),
+			m_hp(hp),
+			m_fuel_type(fuel_type)
+	{
+		std::cout << "### Engine constructor " << std::endl;
+	};
+
+	~Engine() { std::cout << "### Engine destructor " << std::endl; };
+
+
+	void print() {
+		std::cout << "___Engine INFO___" << std::endl<<std::endl;
+		std::cout << "Engine volume		"<<m_engine_volume << std::endl;
+		std::cout << "Engine pumps		"<<m_engine_pumps << std::endl;
+		std::cout << "Engine fuel type	"<<m_fuel_type<<std::endl;
+		std::cout << "HoursePower		" <<m_hp << std::endl;
+	};
+
+
+
+
+
+};
+class Gearbox{
+private:
+	std::string m_transmission_type = "automatic";
+	int m_car_gears = 8;
+	std::string m_type_of_drive = "AWD";
+
+public:
+	Gearbox(){ std::cout << "### Gearbox default constructor" << std::endl; };
+
+	Gearbox(std::string transmission_type, int car_gears,std::string type_of_drive) :
+		m_transmission_type(transmission_type),
+		m_car_gears(car_gears),
+		m_type_of_drive(type_of_drive)
+	{
+		std::cout << "### Gearbox constructor" << std::endl;
+	}
+
+	~Gearbox() { std::cout << "### Gearbox destructor" << std::endl; }
+
+	void print() {
+		std::cout << "___Gearbox INFO___" << std::endl << std::endl;
+		std::cout << "Transmission type	" << m_transmission_type << std::endl;
+		std::cout << "Number of gears		" << m_car_gears << std::endl;
+		std::cout << "Type of drive		" << m_type_of_drive << std::endl;
+
+	}
+
+
+
+
+
+};
+class Wheels {
+private:
+	int m_width = 285;
+	int m_height = 35;
+	int m_radius = 20;
+	std::string m_sezon = "summer";
+public:
+	Wheels() { std::cout << "### Wheels default constructor" << std::endl; };
+	Wheels(int width, int height, int radius, std::string sezon) :
+		m_width(width),
+		m_height(height),
+		m_radius(radius),
+		m_sezon(sezon)
+	{
+		std::cout << "### Wheels constructor" << std::endl;
+	};
+
+	~Wheels() { std::cout << "### Wheels destructor" << std::endl; };
+
+	void print() {
+		std::cout << "___Wheels INFO___" << std::endl << std::endl;
+		std::cout << "Profile width		" << m_width << std::endl;
+		std::cout << "Profile height		" << m_height << std::endl;
+		std::cout << "Landing diameter	" << m_radius << std::endl;
+	}
+
+
+
+
+};
+
+
+class Car{
+private:
+	std::string m_plate;
+	std::string m_name;
+	Body body;
+	Interior interior;
+	Engine engine;
+	Gearbox gearbox;
+	Wheels wheels;
+	
+	
+public:
+	Car() { std::cout<<"### Car default constructor " << std::endl; };
+
+	Car(std::string name,std::string plate):
+		m_name(name),
+		m_plate(plate)
+	{
+		std::cout << "### Car constructor" << std::endl;
+	}
+
+	~Car() { std::cout << "### Car destructor" << std::endl; }
+
+	Car(const Car& obj) {
+		std::cout << "### Copy constructor" << std::endl << std::endl;
+		this->m_name = obj.m_name;
+		this->m_plate = obj.m_plate;
+		this->body = obj.body;
+		this->interior = obj.interior;
+		this->engine = obj.engine;
+		this->gearbox = obj.gearbox;
+		this->wheels = obj.wheels;
+
+	}
+
+	void car_info() {
+		std::cout << "___Car INFO___" << std::endl;
+		std::cout << "Car name		" << m_name << std::endl;
+		std::cout << "Car plates	" << m_plate << std::endl;
+		std::cout << "______________" << std::endl;
+		body.print();
+		interior.print();
+		engine.print();
+		gearbox.print();
+		wheels.print();
+		std::cout << "______________" << std::endl;
+
+	}
+	const std::string& getName() const {
+		return m_name;
+	}
+
+	const std::string& getPlate() const {
+		return m_plate;
+	}
+
+
+
+};
+
+
+class Parking{
+private:
+	Car** cars;
+	int p_capacity;
+	int p_count;
+public:
+	Parking(int capacity) :
+		p_capacity(capacity),
+		p_count(0) {
+		cars = new Car* [p_capacity];
+		std::cout << "Parking with " << p_capacity << " places" << std::endl << std::endl;
+	}
+	~Parking() {
+		for (int i = 0; i < p_count; ++i) {
+			delete cars[i];
+		}
+		delete[]cars;
+		std::cout << "No parking " << std::endl << std::endl;
+	}
+
+	
+	
+	bool Parking_is_Full() {
+		bool res = false;
+		if (p_count == p_capacity) {
+			res = true;
+			return res;
+		}
+		return res;
+	}
+
+	void addCar(const Car& obj) {
+		if (Parking_is_Full()) {
+			std::cout << "Parking is full" << std::endl<<std::endl;
+
+		}
+		else {
+			cars[p_count] = new Car(obj);
+			p_count++;
+			std::cout << obj.getName()<< " with " << obj.getPlate()<< " plates parked" << std::endl<<std::endl;
+
+
+
+		}
+	}
+	void removeCar(const Car& obj) {
+		int checker = -1;
+		for (int i = 0; i < p_count; ++i) {
+			if (cars[i]->getName() == obj.getName() && cars[i]->getPlate() == obj.getPlate()) {
+				checker = i;
+				break;
+			}
+		}
+		if (checker != -1) {
+			delete cars[checker];
+			for (int i = checker; i < p_count - 1; ++i) {
+				cars[i] = cars[i + 1];
+			}
+			p_count--;
+			std::cout << obj.getName() << " with " << obj.getPlate() << " plates removed" << std::endl << std::endl;
+		}
+		
+	}
+
+	void free_places() {
+		std::cout <<"Free places in parking		" << p_capacity - p_count << std::endl<<std::endl;
+	}
+
+	void Parked_Cars_Info() {
+		std::cout << "Parked cars in parking	" << std::endl << std::endl;
+		for (int i = 0; i < p_count; ++i) {
+			cars[i]->car_info();
+		}
+	}
+
+
+
+
+
+
+};
+
+
+int main()
+{
+	srand(time(NULL));
+	Parking Dalma(10);
+	Car a("Bmw","11AA111");
+	Car b("Mercedes", "99ZZ999");
+	Dalma.addCar(a);
+	Dalma.addCar(b);
+	Dalma.Parked_Cars_Info();
+	Dalma.free_places();
+	Dalma.removeCar(b);
+	Dalma.Parked_Cars_Info();
+	Dalma.free_places();
+
+	
+
+
+  
+}
