@@ -1,0 +1,166 @@
+#include <iostream>
+#include <string>
+
+
+
+class Car {
+
+protected:	
+	std::string m_name;
+	std::string m_model;
+	int m_year=0;
+public:
+	Car() {
+		std::cout << "### Car default destructor" << std::endl;
+	}
+	~Car() {
+		std::cout << "### Car destructor" << std::endl;
+	}
+	Car(std::string name, std::string model, int year) :
+		m_name(name),
+		m_model(model),
+		m_year(year)
+	{
+		std::cout << "### Car constructor" << std::endl;
+	}
+	Car(const Car& obj) {
+		std::cout << "### Car copy constructor" << std::endl;
+		this->m_name = obj.m_name;
+		this->m_model = obj.m_model;
+		this->m_year = obj.m_year;
+
+	}
+
+	void car_info() {
+		std::cout << "Brand name " << m_name << std::endl;
+		std::cout << "Model " << m_model << std::endl;
+		std::cout << "Year of manifacture " << m_year << std::endl;
+	}
+};
+
+class Sedan :public Car {
+public:
+	Sedan() {
+		std::cout << "### Sedan default constructor" << std::endl;
+	}
+	~Sedan() {
+		std::cout << "### Sedan destructor" << std::endl;
+	}
+	Sedan(const std::string& name, const std::string model, int year) :
+		Car(name,model,year)
+	{
+		std::cout << "### Sedan constructor" << std::endl;
+	}
+	void car_info() {
+		Car::car_info();
+		std::cout << "Car - > Sedan " << std::endl;
+	}
+
+
+
+};
+class Universal : public Sedan {
+public:
+	Universal(const std::string& name, const std::string& model, int year) :
+		Sedan(name, model, year)
+	{
+		std::cout << "### Universal constructor" << std::endl;
+	}
+	~Universal() {
+		std::cout << "### Universal destructor" << std::endl;
+	}
+	void car_info() {
+		Sedan::car_info();
+		std::cout << "Sedan - > Universal" << std::endl;
+	}
+
+
+};
+
+class OffRoad : public Car {
+public:
+	OffRoad() {
+		std::cout << "### OffRoad default constructor" << std::endl;
+	}
+	~OffRoad() {
+		std::cout << "### OffRoad destructor" << std::endl;
+	}
+	OffRoad(const std::string& name, const std::string model, int year) :
+		Car(name, model, year)
+	{
+		std::cout << "### OffRoad constructor" << std::endl;
+	}
+	void car_info() {
+		Car::car_info();
+		std::cout << "Car - > OffRoad " << std::endl;
+	}
+};
+
+class Crossover : public OffRoad {
+public:
+	Crossover() {
+		std::cout << "### Crossover default constructor" << std::endl;
+	}
+	Crossover(const std::string& name, const std::string& model, int year) :
+		OffRoad(name, model, year)
+	{
+		std::cout << "### Crossover constructor" << std::endl;
+	}
+	~Crossover() {
+		std::cout << "### Universal destructor" << std::endl;
+	}
+	void car_info() {
+		OffRoad::car_info();
+		std::cout << "Offroad - > Crossover" << std::endl;
+	}
+
+};
+class SportCar : public Car {
+public:
+	SportCar() {
+		std::cout << "### SportCar default constructor" << std::endl;
+	}
+	~SportCar() {
+		std::cout << "### SportCar destructor" << std::endl;
+	}
+	SportCar(const std::string& name, const std::string model, int year) :
+		Car(name, model, year)
+	{
+		std::cout << "### SportCar constructor" << std::endl;
+	}
+	void car_info() {
+		Car::car_info();
+		std::cout << "Car - > SportCar " << std::endl;
+	}
+};
+
+class Roadster : public SportCar {
+public:
+	Roadster() {
+		std::cout << "### Roadster default constructor" << std::endl;
+	}
+	~Roadster() {
+		std::cout << "### Roadster destructor" << std::endl;
+	}
+	Roadster(const std::string& name, const std::string model, int year) :
+		SportCar(name, model, year)
+	{
+		std::cout << "### Roadster constructor" << std::endl;
+	}
+	void car_info() {
+		SportCar::car_info();
+		std::cout << "SportCar - > Roadster " << std::endl;
+	}
+
+};
+
+int main()
+{
+	Universal A("Chevrolet", "Malibu", 2018);
+	Crossover B("Chevrolet", "Tracker", 2018);
+	Roadster C("Chevrolet", "Corvette", 2005);
+	A.car_info();
+	B.car_info();
+	C.car_info();
+  
+}
