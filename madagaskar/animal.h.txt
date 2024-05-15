@@ -1,0 +1,70 @@
+#ifndef ANIMAL_H
+#define ANIMAL_H
+
+#include <iostream>
+#include <string>
+
+
+class Animal {
+public:
+    Animal();
+    virtual ~Animal();
+    virtual void voice();
+};
+
+
+class Lions : public Animal {
+public:
+    Lions();
+    virtual ~Lions();
+    virtual void voice() override;
+
+private:
+    std::string m_name = "Alex";
+};
+
+
+class Behemots : public Animal {
+public:
+    Behemots();
+    virtual ~Behemots();
+    virtual void voice() override;
+
+private:
+    std::string m_name = "Gloria";
+};
+
+
+class Giraffes : public Animal {
+public:
+    Giraffes();
+    virtual ~Giraffes();
+    virtual void voice() override;
+
+private:
+    std::string m_name = "Melman";
+};
+
+
+class Zebras : public Animal {
+public:
+    Zebras();
+    virtual ~Zebras();
+    virtual void voice() override;
+
+private:
+    std::string m_name = "Marty";
+};
+
+
+class Pinguins : public Animal {
+public:
+    Pinguins();
+    virtual ~Pinguins();
+    virtual void voice() override;
+
+private:
+    std::string m_name = "Schkiper";
+};
+
+#endif 

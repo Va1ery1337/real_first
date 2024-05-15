@@ -1,0 +1,79 @@
+#include "animal.h"
+
+
+Animal::Animal() {
+    std::cout << __func__ << std::endl;
+}
+
+Animal::~Animal() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Animal::voice() {
+    std::cout << "Animal" << std::endl;
+}
+
+
+Lions::Lions() {
+    std::cout << __func__ << std::endl;
+}
+
+Lions::~Lions() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Lions::voice() {
+    std::cout << "I am Lion " << m_name << std::endl;
+}
+
+
+Behemots::Behemots() {
+    std::cout << __func__ << std::endl;
+}
+
+Behemots::~Behemots() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Behemots::voice() {
+    std::cout << "I am Behemot " << m_name << std::endl;
+}
+
+
+Giraffes::Giraffes() {
+    std::cout << __func__ << stdоstd::endl;
+}
+
+Giraffes::~Giraffes() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Giraffes::voice() {
+    std::cout << "I am Giraffe " << m_name << std::endl;
+}
+
+
+Zebras::Zebras() {
+    std::cout << __func__ << std::endl;
+}
+
+Zebras::~Zebras() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Zebras::voice() {
+    std::cout << "I am Zebra " << m_name << std::endl;
+}
+
+
+Pinguins::Pinguins() {
+    std::cout << __func__ << std::endl;
+}
+
+Pinguins::~Pinguins() {
+    std::cout << __func__ << " Destructor" << std::endl;
+}
+
+void Pinguins::voice() {
+    std::cout << "I am Pinguin " << m_name << std::endl;
+}

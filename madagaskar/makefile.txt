@@ -1,0 +1,26 @@
+# Имя исполняемого файла
+EXEC = madagaskar
+
+# Компилятор
+CXX = g++
+
+# Флаги компиляции
+CXXFLAGS = -Wall -Wextra -std=c++11
+
+# Список файлов исходного кода
+SOURCES = main.cpp animal.cpp
+
+# Список объектов, полученных после компиляции
+OBJECTS = $(SOURCES:.cpp=.o)
+
+# Правило компиляции и сборки
+$(EXEC): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJECTS)
+
+# Правило компиляции отдельных файлов
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Правило очистки
+clean:
+	rm -f $(OBJECTS) $(EXEC)
