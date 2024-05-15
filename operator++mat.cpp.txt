@@ -1,0 +1,275 @@
+#include <iostream>
+#include <ctime>
+#include <stdexcept>
+
+void PrintArr(int** arr, int rows, int cols) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+
+            std::cout << arr[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+
+}
+
+class Matrix {
+
+
+private:
+    int** elems;
+    int rows;
+    int cols;
+public:
+
+    Matrix() :elems(NULL), rows(0), cols(0) { std::cout << "Construct " << std::endl; };
+
+    Matrix(int rows, int cols) : rows(rows), cols(cols) {
+        std::cout << "Construct " << this << std::endl;
+        elems = new int* [rows];
+        for (int i = 0; i < rows; ++i) {
+
+            elems[i] = new int[cols]();
+        }
+
+    }
+    ~Matrix() {
+        std::cout << "Destruct" << this << std::endl;
+        for (int i = 0; i < rows; ++i) {
+            delete[] elems[i];
+        }
+        delete[] elems;
+    }
+
+
+    Matrix& operator++() {
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                ++elems[i][j];
+            }
+        }
+
+        return *this;
+    }
+    Matrix& operator++(int) {
+        Matrix Temp = *this;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                ++elems[i][j];
+            }
+        }
+        return Temp;
+
+
+
+
+    }
+
+    Matrix(const Matrix& obj) {                                             // copy const
+        std::cout << "Copy Constructor " << this << std::endl;
+
+
+        this->rows = obj.rows;
+        this->cols = obj.cols;
+        this->elems = new int* [rows];
+        for (int i = 0; i < rows; ++i) {
+            this->elems[i] = new int[cols];
+
+            for (int j = 0; j < cols; ++j) {
+                this->elems[i][j] = obj.elems[i][j];
+            }
+
+
+        }
+
+
+    }
+    Matrix& operator =(const Matrix& obj) {                                 // Assignment
+        if (this == &obj) {
+            std::cout << "Same shit" << this << std::endl;
+            return *this;
+        }
+        std::cout << "Assign Constructor " << this << std::endl;
+
+
+        for (int i = 0; i < rows; ++i) {
+            delete[] this->elems[i];
+        }
+        delete[] this->elems;
+
+
+
+        rows = obj.rows;
+        cols = obj.cols;
+        elems = new int* [rows];
+        for (int i = 0; i < rows; ++i) {
+            elems[i] = new int[cols];
+
+            for (int j = 0; j < cols; ++j) {
+                elems[i][j] = obj.elems[i][j];
+            }
+
+
+        }
+        return *this;
+
+    }
+
+    Matrix operator * (const Matrix& obj) {
+        if (obj.rows == 1 and obj.cols == 1) {
+
+            Matrix MUL(this->rows, this->cols);
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    MUL.elems[i][j] = this->elems[i][j] * obj.elems[0][0];
+                }
+            }
+
+            return MUL;
+        }
+        if (this->cols != obj.rows) {
+            std::cout << "Cant multuply" << std::endl;
+            return Matrix();
+        }
+        Matrix MUL(rows, obj.cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < obj.cols; ++j) {
+                int sum = 0;
+                for (int l = 0; l < cols; ++l) {
+                    sum += this->elems[i][l] * obj.elems[l][j];
+
+                }
+                MUL.elems[i][j] = sum;
+
+            }
+
+
+        }
+
+        return MUL;
+    }
+    Matrix operator +(const Matrix& obj) {
+
+        if (obj.rows == 1 and obj.cols == 1) {
+
+            Matrix SUM(this->rows, this->cols);
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    SUM.elems[i][j] = this->elems[i][j] + obj.elems[0][0];
+                }
+            }
+
+            return SUM;
+        }
+
+        if (this->rows != obj.rows or this->cols != obj.cols) {
+            std::cout << "Dif Dem" << std::endl;
+            return Matrix();
+
+        }
+        Matrix SUM(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                SUM.elems[i][j] = this->elems[i][j] + obj.elems[i][j];
+            }
+        }
+        return SUM;
+
+
+
+    }
+
+    int& at(int row, int col) {
+
+        return elems[row][col];
+    }
+    int getRow() {
+
+        return rows;
+    }
+    int getCol() {
+        return cols;
+    }
+    void setRow(int row) {
+        rows = row;
+    }
+    void setCol(int col) {
+        cols = col;
+    }
+    void Print() {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+
+                std::cout << elems[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+
+
+        std::cout << std::endl;
+    }
+    void Randomize() {
+
+
+        for (int i = 0; i < rows; ++i) {
+
+            for (int j = 0; j < cols; ++j) {
+
+                elems[i][j] = rand() % 100;
+
+            }
+
+
+        }
+
+    }
+    void Transpose() {
+        int** T_matrix = new int* [cols];
+        for (int i = 0; i < cols; ++i) {
+
+            T_matrix[i] = new int[rows];
+        }
+
+        for (int i = 0; i < cols; ++i) {
+            for (int j = 0; j < rows; ++j) {
+                T_matrix[i][j] = elems[j][i];
+
+            }
+
+
+        }
+
+        PrintArr(T_matrix, cols, rows);
+
+        for (int i = 0; i < rows; ++i) {
+            delete[] T_matrix[i];
+
+        }
+        delete[] T_matrix;
+
+    }
+
+};
+
+int main()
+{
+    srand(time(NULL));
+    Matrix A(3, 3);
+    Matrix B(3, 3);
+    A.Randomize();
+    A.Print();
+    A++;
+    B = A;
+    B.Print();
+  
+ 
+
+
+
+}
+
+
+
