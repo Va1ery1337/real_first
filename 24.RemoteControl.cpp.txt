@@ -20,6 +20,8 @@ public:
 class TV_RC : public RemoteControl {
 public:
     TV_RC() : isPowerOn(false), volume(0), channel(1) {}
+   
+    ~TV_RC() {};
 
     void power() override {
         isPowerOn = !isPowerOn;
