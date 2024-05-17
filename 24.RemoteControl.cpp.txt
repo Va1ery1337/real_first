@@ -1,0 +1,85 @@
+#include <iostream>
+
+
+class RemoteControl {
+public:
+    RemoteControl() {
+    
+    };
+    virtual ~RemoteControl() {
+    
+    };
+    virtual void power() = 0;
+    virtual void volumeUp() = 0;
+    virtual void volumeDown() = 0;
+    virtual void channelUp() = 0;
+    virtual void channelDown() = 0;
+};
+
+
+class TV_RC : public RemoteControl {
+public:
+    TV_RC() : isPowerOn(false), volume(0), channel(1) {}
+
+    void power() override {
+        isPowerOn = !isPowerOn;
+        std::cout << "Power is " << (isPowerOn ? "on" : "off") << std::endl;
+    }
+
+    void volumeUp() override {
+        if (isPowerOn && volume < 100) {
+            volume++;
+        }
+        std::cout << "Volume now is " << volume << std::endl;
+    }
+
+    void volumeDown() override {
+        if (isPowerOn && volume > 0) {
+            volume--;
+        }
+        std::cout << "Volume now is " << volume << std::endl;
+    }
+
+    void channelUp() override {
+        if (isPowerOn) {
+            channel = (channel == 20) ? 1 : channel + 1;
+        }
+        std::cout << "Channel now is " << channel << std::endl;
+    }
+
+    void channelDown() override {
+        if (isPowerOn) {
+            channel = (channel == 1) ? 20 : channel - 1;
+        }
+        std::cout << "Channel now is " << channel << std::endl;
+    }
+
+    void SetChannel(int a) {
+        if (a != 0 && a < 20) {
+            channel = a;
+            std::cout << "Channel now is " << channel << std::endl;
+        }
+        
+    }
+
+private:
+    bool isPowerOn;
+    int volume;
+    int channel;
+};
+
+int main() {
+    TV_RC jvc;
+
+    jvc.power();
+    jvc.volumeUp();
+    jvc.volumeUp();
+    jvc.volumeDown();
+    jvc.channelUp();
+    jvc.channelUp();
+    jvc.channelDown();
+    jvc.SetChannel(15);
+    jvc.power();
+
+    return 0;
+}
