@@ -1,0 +1,185 @@
+
+#include <iostream>
+#include <string>
+
+class Animal {
+public:
+	static int count;
+	Animal() {
+		std::cout << __func__ << std::endl;
+		count++;
+	};
+	virtual ~Animal() {
+		std::cout << __func__ << std::endl;
+	}
+	virtual void voice() = 0;
+	virtual int getWeight() = 0;
+	virtual int getYear() = 0;
+	virtual void Animal_info() = 0;
+};
+class Lions : public Animal {
+public:
+	Lions() {
+		std::cout << __func__ << std::endl;
+	};
+	~Lions() {
+		std::cout << __func__ << std::endl;
+	};
+	virtual void voice() override {
+		std::cout << "I am Lion " << m_name << std::endl;
+	}
+	virtual void Animal_info() override {
+		std::cout << "___Animal INFO___" << std::endl;
+		std::cout << m_year << " years" << std::endl;
+		std::cout << m_weight << " kg" << std::endl;
+	}
+	int getWeight() override {
+		return m_weight;
+	}
+	int getYear() override {
+		return m_year;
+	}
+private:
+	std::string m_name = "Alex";
+	int m_year = 10;
+	int m_weight = 150;
+
+};
+class Behemots : public Animal {
+public:
+	Behemots() {
+		std::cout << __func__ << std::endl;
+	};
+	~Behemots() {
+		std::cout << __func__ << std::endl;
+	};
+	virtual void voice() override {
+		std::cout << "I am Behemot " << m_name << std::endl;
+	}
+	virtual void Animal_info() override {
+		std::cout << "___Animal INFO___" << std::endl;
+		std::cout << m_year << " years" << std::endl;
+		std::cout << m_weight << " kg" << std::endl;
+	}
+	int getWeight() override {
+		return m_weight;
+	}
+	int getYear() override {
+		return m_year;
+	}
+private:
+	std::string m_name = "Gloria";
+	int m_year = 9;
+	int m_weight = 400;
+
+};
+class Giraffes : public Animal {
+public:
+	Giraffes() {
+		std::cout << __func__ << std::endl;
+	};
+	~Giraffes() {
+		std::cout << __func__ << std::endl;
+	};
+	virtual void voice() override {
+		std::cout << "I am Giraffe " << m_name << std::endl;
+	}
+	virtual void Animal_info() override {
+		std::cout << "___Animal INFO___" << std::endl;
+		std::cout << m_year << " years" << std::endl;
+		std::cout << m_weight << " kg" << std::endl;
+	}
+	int getWeight() override {
+		return m_weight;
+	}
+	int getYear() override {
+		return m_year;
+	}
+private:
+	std::string m_name = "Melman";
+	int m_year = 11;
+	int m_weight = 290;
+
+};
+class Zebras : public Animal {
+public:
+	Zebras() {
+		std::cout << __func__ << std::endl;
+	};
+	~Zebras() {
+		std::cout << __func__ << std::endl;
+	};
+	virtual void voice() override {
+		std::cout << "I am Pinguin " << m_name << std::endl;
+	}
+	virtual void Animal_info() override {
+		std::cout << "___Animal INFO___" << std::endl;
+		std::cout << m_year << " years" << std::endl;
+		std::cout << m_weight << " kg" << std::endl;
+	}
+	int getWeight() override {
+		return m_weight;
+	}
+	int getYear() override {
+		return m_year;
+	}
+private:
+	std::string m_name = "Marty";
+	int m_year = 8;
+	int m_weight = 140;
+
+};
+class Pinguins : public Animal {
+public:
+	Pinguins() {
+		std::cout << __func__ << std::endl;
+	};
+	~Pinguins() {
+		std::cout << __func__ << std::endl;
+	};
+	virtual void voice() override {
+		std::cout << "I am Pinguin " << m_name << std::endl;
+	}
+	virtual void Animal_info() override {
+		std::cout << "___Animal INFO___" << std::endl;
+		std::cout << m_year << " years" << std::endl;
+		std::cout << m_weight << " kg" << std::endl;
+	}
+	int getWeight() override {
+		return m_weight;
+	}
+	int getYear() override {
+		return m_year;
+	}
+private:
+	std::string m_name = "Schkiper";
+	int m_year = 5;
+	int m_weight = 20;
+};
+
+int Animal::count = 0;
+
+int main()
+{
+	int size = 5;
+	Animal** Madagaskar = new Animal * [size];
+
+	Madagaskar[0] = new Lions();
+	Madagaskar[1] = new Behemots();
+	Madagaskar[2] = new Giraffes();
+	Madagaskar[3] = new Zebras();
+	Madagaskar[4] = new Pinguins();
+	
+
+	for (int i = 0; i < size; ++i) {
+		Madagaskar[i]->Animal_info();
+		Madagaskar[i]->voice();
+	}
+	std::cout << "Animals in Madagaskar " << Animal::count << std::endl;
+	for (int i = 0; i < size; ++i) {
+		delete Madagaskar[i];
+	}
+	delete[]Madagaskar;
+
+	return 0;
+}
