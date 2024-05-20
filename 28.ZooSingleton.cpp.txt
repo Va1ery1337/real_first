@@ -1,0 +1,114 @@
+#include <iostream>
+#include <string>
+
+
+class Animal {
+private:
+    std::string m_name;
+    int m_age;
+
+public:
+    Animal(const std::string& name, int age) : m_name(name), m_age(age) {};
+    virtual ~Animal() {};
+
+    virtual std::string GetName() const { 
+        return m_name;
+    }
+    virtual int GetAge() const {
+        return m_age;
+    }
+};
+class Lion : public Animal {
+public:
+    Lion(const std::string& name, int age) : Animal(name, age) {};
+    ~Lion() {};
+
+   
+};
+
+// Определение класса-наследника Elephant
+class Tiger : public Animal {
+public:
+    Tiger(const std::string& name, int age) : Animal(name, age) {};
+    ~Tiger() {};
+
+  
+};
+class Zoo {
+private:
+    static Zoo* z_obj; 
+    Animal** m_animals;   
+    int m_capacity;       
+    int m_count;          
+
+    Zoo(int capacity = 3) : m_capacity(capacity), m_count(0) {
+        m_animals = new Animal * [m_capacity];
+    }
+
+    ~Zoo() {
+        for (int i = 0; i < m_count; ++i) {
+            delete m_animals[i];
+        }
+        delete[] m_animals;
+    }
+    
+
+public:
+
+    
+    
+    static Zoo* Get_Z() {
+        if (!z_obj) {
+            z_obj = new Zoo();
+        }
+        return z_obj;
+    }
+
+   
+    void AddAnimal(Animal* animal) {
+        if (m_count < m_capacity) {
+            m_animals[m_count++] = animal;
+        }
+        else {
+            std::cout << "No place" << std::endl;
+        }
+    }
+
+    
+    Animal** GetAnimals() const {
+        return m_animals;
+    }
+
+    
+    int GetAnimalCount() const {
+        return m_count;
+    }
+};
+
+
+Zoo* Zoo::z_obj = nullptr;
+
+int main() {
+    Zoo* zoo = Zoo::Get_Z();
+    
+    zoo->AddAnimal(new Lion("Alex", 5));
+    zoo->AddAnimal(new Tiger("Rumba", 3));
+    zoo->AddAnimal(new Lion("Simba", 2));
+    zoo->AddAnimal(new Tiger("Ocean", 4));
+
+    
+    Animal** animals = zoo->GetAnimals();
+
+    int animalsCount = zoo->GetAnimalCount();
+
+
+    std::cout << "Animals in Zoo " << std::endl;
+    for (int i = 0; i < animalsCount; ++i) {
+        std::cout << animals[i]->GetName() << " " << animals[i]->GetAge() << std::endl;
+    }
+
+   
+
+
+    return 0;
+}
