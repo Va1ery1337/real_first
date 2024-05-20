@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+class Animal {
+private:
+	std::string m_name;
+	int m_age;
+	
+
+
+public:
+	explicit Animal(const std::string& name,int age):m_name(name) ,m_age(age) {
+		
+		
+	};
+	Animal() {
+		std::cout << __func__ << std::endl;
+	}
+	virtual ~Animal() {
+		std::cout << __func__ << std::endl;
+		
+	}
+	Animal(Animal&& obj) noexcept : m_name(obj.m_name), m_age(obj.m_age){
+
+		obj.m_name = nullptr;
+	}
+
+	virtual std::string GetName(){
+		return m_name;
+	}
+
+	virtual int GetAge() {
+		return m_age;
+	}
+
+	virtual bool operator>(const Animal& obj) const{
+		return m_age > obj.m_age;
+	}
+	virtual bool operator<(const Animal& obj) const {
+		return m_age < obj.m_age;
+	}
+	virtual bool operator==(const Animal& obj) const {
+		return m_age == obj.m_age;
+	}
+
+
+};
+
+
+
+
+class Lions : public Animal {
+public:
+	explicit Lions(const std::string& name, int age) : Animal(name, age) {
+
+	}
+	
+	~Lions() {
+		std::cout << __func__ << std::endl;
+	};
+	
+
+};
+class Behemots : public Animal {
+public:
+	explicit Behemots(const std::string& name, int age) : Animal(name, age) {
+
+	}
+	
+	~Behemots() {
+		std::cout << __func__ << std::endl;
+	};
+	
+
+};
+
+
+
+
+int main()
+{
+	int size = 5;
+	Animal** Zoo = new Animal * [size];
+	Zoo[0] = new Lions("Alex", 23);
+	Zoo[1] = new Lions("Simba", 15);
+	Zoo[2] = new Lions("Rumba", 20);
+	Zoo[3] = new Behemots("Gloria", 30);
+	Zoo[4] = new Behemots("Terevik", 35);
+
+	std::sort(Zoo, Zoo + size, [](Animal* a, Animal* b) {
+		return *a > *b;
+	});
+
+	for (int i = 0; i < size; ++i)
+	{
+		std::cout << Zoo[i]->GetName() << std::endl;
+	}
+
+
+	for (int i = 0; i < size; ++i) {
+		delete Zoo[i];
+	}
+	delete[]Zoo;
+
+	return 0;
+}
