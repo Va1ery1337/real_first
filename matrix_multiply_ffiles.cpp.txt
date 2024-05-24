@@ -1,0 +1,135 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+
+class Matrix {
+private:
+    int** data;
+    int rows;
+    int cols;
+
+public:
+    Matrix(int r, int c) : rows(r), cols(c) {
+        data = new int* [rows];
+        for (int i = 0; i < rows; ++i) {
+            data[i] = new int[cols];
+        }
+    }
+
+    ~Matrix() {
+        for (int i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
+    }
+
+    void Randomize() {
+        srand(time(0));
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                data[i][j] = rand() % 100;
+            }
+        }
+    }
+
+    void saveToFile(const std::string& filename) {
+        std::ofstream file(filename);
+        if (file.is_open()) {
+            file << rows << " " << cols << std::endl; 
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < cols; ++j) {
+                    file << data[i][j] << " ";
+                }
+                file << std::endl;
+            }
+            file.close();
+        }
+        else {
+            std::cerr << "Cant open the file" << std::endl;
+        }
+    }
+
+    void print() {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                std::cout << data[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
+
+    static Matrix* readFromFile(const std::string& filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << "Cant open the file" << std::endl;
+            return nullptr;
+        }
+
+        int rows, cols;
+        file >> rows >> cols;
+        Matrix* matrix = new Matrix(rows, cols);
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                file >> matrix->data[i][j];
+            }
+        }
+        file.close();
+        return matrix;
+    }
+
+    static Matrix* multiply(const Matrix* first, const Matrix* second) {
+        if (first->cols != second->rows) {
+            std::cerr << "Cant multiply" << std::endl;
+            return nullptr;
+        }
+
+        Matrix* result = new Matrix(first->rows, second->cols);
+        for (int i = 0; i < first->rows; ++i) {
+            for (int j = 0; j < second->cols; ++j) {
+                result->data[i][j] = 0;
+                for (int k = 0; k < first->cols; ++k) {
+                    result->data[i][j] += first->data[i][k] * second->data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+};
+
+void multiplyMatricesFromFile(const std::string& file1, const std::string& file2, const std::string& outputFile) {
+    Matrix* matrix1 = Matrix::readFromFile(file1);
+    Matrix* matrix2 = Matrix::readFromFile(file2);
+
+    if (matrix1 && matrix2) {
+        Matrix* result = Matrix::multiply(matrix1, matrix2);
+        if (result) {
+            result->saveToFile(outputFile);
+            delete result;
+        }
+    }
+
+    delete matrix1;
+    delete matrix2;
+}
+
+int main() {
+    Matrix matrix1(3, 3);
+    Matrix matrix2(3, 3);
+    matrix1.Randomize();
+    matrix2.Randomize();
+    
+
+    std::string path1 = "";
+    std::string path2 = "";
+    std::string resultPath = "";
+
+    matrix1.saveToFile(path1);
+    matrix2.saveToFile(path2);
+
+    multiplyMatricesFromFile(path1, path2, resultPath);
+
+    return 0;
+}
