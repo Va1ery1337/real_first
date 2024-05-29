@@ -1,0 +1,111 @@
+#include <iostream>
+
+template <typename T>
+
+class Vector {
+private:
+    T* elems = nullptr;
+    int size = 0;
+    int capacity = 0;
+public:
+    Vector() :elems(nullptr), size(0), capacity(0) {
+
+    }
+    ~Vector() {
+        delete[] elems;
+    }
+
+    void resize(int new_capacity) {
+        T* new_elems = new T[new_capacity];
+        for (int i = 0; i < size; ++i) {
+            new_elems[i] = elems[i];
+        }
+        delete[]elems;
+        elems = new_elems;
+        capacity = new_capacity;
+    }
+
+    void push_back(const T& value) {
+        if (size == capacity) {
+            if (capacity == 0) {
+                resize(1);
+            }
+            else {
+                resize(capacity * 2);
+            }
+        }
+        elems[size++] = value;
+    }
+
+    void pop_back() {
+        if (size > 0) {
+            --size;
+        }
+        else {
+            std::cout << "empty vector" << std::endl;
+        }
+    }
+
+    void assign(int _size, const T& value) {
+        if (_size > capacity) {
+            resize(_size * 2);
+        }
+        size = _size;
+        for (int i = 0; i < size; ++i) {
+            elems[i] = value;
+        }
+    }
+
+    T& operator[](int index) {
+        if (index >= size || index < 0) {
+           std::cout<<"Index out of range"<<std::endl;
+        }
+        else {
+            return elems[index];
+        }
+        
+    }
+
+    void Print() {
+        for (int i = 0; i < size; ++i) {
+            std::cout << elems[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    int GetSize() {
+        return size;
+    }
+    int GetCapacity() {
+        return capacity;
+    }
+
+
+
+
+
+
+};
+
+
+int main(int argc, char* argv[]) {
+
+    Vector<int> vec;
+    vec.assign(5, 777);
+    vec.pop_back();
+    vec.push_back(999);
+    vec[2] = 555;
+    vec.Print();
+    
+    std::cout << vec.GetSize() << std::endl;
+    std::cout << vec.GetCapacity() << std::endl;
+
+
+    Vector<std::string> str;
+    str.push_back("Asd");
+    str.push_back("fgh");
+    str.Print();
+
+
+    return 0;
+}
