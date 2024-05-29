@@ -1,0 +1,29 @@
+#include <iostream>
+
+
+template <int n>
+class Fib {
+public:
+    static constexpr int value = Fib<n - 1>::value + Fib<n - 2>::value;
+};
+
+
+template <>
+class Fib<0> {
+public:
+    static constexpr int value = 0;
+};
+
+
+template <>
+class Fib<1> {
+public:
+    static constexpr int value = 1;
+};
+
+int main(int argc, char* argv[]) {
+    
+    std::cout << Fib<5>::value <<std::endl;
+
+    return 0;
+}
