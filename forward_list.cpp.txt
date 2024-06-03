@@ -1,0 +1,230 @@
+#include <iostream>
+#include <stdexcept>
+
+template <typename T>
+class List {
+public:
+    List();
+    ~List();
+    void push_back(T data);
+    void push_front(T data);
+    void pop_front();
+    void pop_back();
+    void insert(int index, T data);
+    void remove(int index);
+    void clear();
+    int GetSize();
+    T& operator [](const int index);
+    void Print();
+    bool has_Cycle() const;
+
+
+private:
+    template <typename U>
+    class Node {
+    public:
+        Node* pNext;
+        U data;
+
+        Node(U data = U(), Node* pNext = nullptr) {
+            this->data = data;
+            this->pNext = pNext;
+        }
+    };
+
+    Node<T>* head;
+    int size;
+};
+
+template <typename T>
+List<T>::List() : head(nullptr), size(0) {
+}
+
+template <typename T>
+List<T>::~List() {
+    Node<T>* current = head;
+    while (current != nullptr) {
+        Node<T>* next = current->pNext;
+        delete current;
+        current = next;
+    }
+}
+
+template <typename T>
+void List<T>::push_back(T data) {
+    if (head == nullptr) {
+        head = new Node<T>(data);
+    }
+    else {
+        Node<T>* current = head;
+        while (current->pNext != nullptr) {
+            current = current->pNext;
+        }
+        current->pNext = new Node<T>(data);
+    }
+    size++;
+}
+template <typename T>
+void List<T>::push_front(T data) {
+    if (head == nullptr) {
+        head = new Node<T>(data);
+    }
+    else {
+        Node<T>* pushed = new Node<T>(data);
+        pushed->pNext = head;
+        head = pushed;
+    }
+    size++;
+}
+
+template <typename T>
+void List<T>::pop_front() {
+    Node<T>* poped = head;
+    head = head->pNext;
+    delete poped;
+    size--;
+}
+
+template <typename T>
+void List<T>::pop_back() {
+    if (head == nullptr) {
+        throw std::out_of_range("List is empty");
+    }
+
+    if (head->pNext == nullptr) {
+        delete head;
+        head = nullptr;
+    }
+    else {
+        Node<T>* current = head;
+        while (current->pNext->pNext != nullptr) {
+            current = current->pNext;
+        }
+        delete current->pNext;
+        current->pNext = nullptr;
+    }
+    size--;
+}
+
+template <typename T>
+void List<T>::insert(int index, T data) {
+    if (index<0 || index > size) {
+        throw std::out_of_range("bad index");
+    }
+    if (index == 0) {
+        push_front(data);
+    }
+    else {
+        
+        Node<T>* temp = head;
+        for (int i = 0; i < index-1; ++i) {
+            temp = temp->pNext;
+        }
+        Node<T>* inserted = new Node<T>(data, temp->pNext);
+        temp->pNext = inserted;
+        size++;
+
+
+    }
+}
+
+template <typename T>
+void List<T>::remove(int index) {
+    if (index < 0 || index > size) {
+        throw std::out_of_range("bad index");
+    }
+    if (index == 0) {
+        pop_front();
+    }
+    else {
+        Node<T>* current = head;
+        for (int i = 0; i < index - 1; ++i) {
+            current = current->pNext;
+        }
+        Node<T>* temp = current->pNext;
+        current->pNext = current->pNext->pNext;
+        delete temp;
+    }
+    size--;
+}
+
+template <typename T>
+void List<T>::clear() {
+    while (size) {
+        pop_front();
+    }
+}
+
+int List<int>::GetSize() {
+    return size;
+}
+
+template <typename T>
+T& List<T>::operator [](const int index) {
+    int current_index = 0;
+    Node<T>* current = this->head;
+    while (current != nullptr) {
+        if (current_index == index) {
+            return current->data;
+        }
+        current = current->pNext;
+        current_index++;
+    }
+}
+
+template <typename T>
+void List<T>::Print() {
+    Node<T>* current = this->head;
+    for (int i = 0; i < size; ++i) {
+        std::cout << current->data <<" ";
+        current = current->pNext;
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+bool List<T>::has_Cycle() const{
+    if (head == nullptr) {
+        return false;
+    }
+    Node<T>* slow = head;
+    Node<T>* fast = head->pNext;
+
+    while (fast != nullptr && fast->pNext != nullptr) {
+        if (slow == fast) {
+            return true;
+        }
+        slow = slow->pNext;
+        fast = fast->pNext->pNext;
+    }
+    
+    return false;
+}
+
+
+
+
+
+int main() {
+    List<int> list;
+    list.push_back(8);
+    list.push_back(7);
+    list.push_back(6);
+    list.push_back(5);
+    list.push_front(1);
+    list.Print();
+    list.insert(1, 5);
+    list.remove(2);
+    list.Print();
+    list.pop_back();
+    list.pop_front();
+    list.Print();
+    if (list.has_Cycle()) {
+        std::cout << "cycl" << std::endl;
+    }
+    else {
+        std::cout << "no cycl" << std::endl;
+    }
+    
+    return 0;
+}
