@@ -1,0 +1,176 @@
+#include <iostream>
+#include <stdexcept>
+#include <stack>
+
+template <typename T>
+class Node {
+
+public:
+    T data;
+    Node* pNext;
+    Node(T data) {
+        this->data = data;
+        this->pNext = nullptr;
+    }
+};
+
+template <typename T>
+class fList {
+private:
+    Node<T>* head;
+
+public:
+    fList();
+    ~fList();
+
+    void push_front(const T& data);
+    void pop_front();
+    void insert(const T& data, int index);
+    void Display() const;
+    bool has_Cycle() const;
+    T& operator [](const int index);
+    void reverse();
+};
+
+template <typename T>
+void fList<T>::push_front(const T& data) {
+    Node<T>* pushed = new Node<T>(data);
+    pushed->pNext = head;
+    head = pushed;
+}
+
+template <typename T>
+void fList<T>::pop_front() {
+    if (head == nullptr) {
+        std::cerr << "no elemenst in list" << std::endl;
+    }
+    else {
+        Node<T>* poped = head;
+        head = head->pNext;
+        delete poped;
+
+    }
+}
+
+template <typename T>
+void fList<T>::insert(const T& data, int index) {
+    if (index < 0) {
+        throw std::out_of_range("Negative index");
+    }
+
+    if (index == 0) {
+        push_front(data);
+        return;
+    }
+
+    Node<T>* current = head;
+    for (int i = 0; i < index - 1; ++i) {
+        if (current == nullptr) {
+            std::cerr << "Cant insert out of range" << std::endl;
+            return;
+        }
+        current = current->pNext;
+    }
+
+
+
+    Node<T>* inserted = new Node<T>(data);
+    inserted->pNext = current->pNext;
+    current->pNext = inserted;
+
+}
+
+
+template <typename T>
+void fList<T>::Display() const {
+    Node<T>* current = head;
+    while (current != nullptr) {
+        std::cout << current->data << " -> ";
+        current = current->pNext;
+    }
+    std::cout << "nullptr" << std::endl;
+}
+
+template <typename T>
+bool fList<T>::has_Cycle() const {
+    if (head == nullptr) {
+        return false;
+    }
+
+    Node<T>* slow = head;
+    Node<T>* fast = head;
+
+    while (fast != nullptr && fast->pNext != nullptr) {
+        slow = slow->pNext;
+        fast = fast->pNext->pNext;
+
+        if (slow == fast) {
+            return true;
+        }
+    }
+    return false;
+}
+
+template <typename T>
+fList<T>::fList() :head(nullptr) {};
+
+template <typename T>
+fList<T>::~fList() {
+    while (head != nullptr) {
+        pop_front();
+    }
+}
+
+template <typename T>
+T& fList<T>::operator [](const int index) {
+    int current_index = 0;
+    Node<T>* current = this->head;
+    while (current != nullptr) {
+        if (current_index == index) {
+            return current->data;
+        }
+        current = current->pNext;
+        current_index++;
+    }
+}
+
+template <typename T>
+void fList<T>::reverse() {
+    if (head == nullptr) {
+        return;
+    }
+
+    std::stack<Node<T>*> nodeStack;
+    Node<T>* current = head;
+
+    while (current != nullptr) {
+        nodeStack.push(current);
+        current = current->pNext;
+    }
+
+    head = nodeStack.top();
+    nodeStack.pop();
+    current = head;
+
+    while (!nodeStack.empty()) {
+        current->pNext = nodeStack.top();
+        nodeStack.pop();
+        current = current->pNext;
+    }
+    current->pNext = nullptr;
+}
+
+int main() {
+   
+    fList<int>  list;
+    list.push_front(1);
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(4);
+    list.Display();
+    list.reverse();
+    list.Display();
+
+
+    return 0;
+}
