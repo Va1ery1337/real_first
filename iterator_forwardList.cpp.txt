@@ -1,0 +1,159 @@
+#include <iostream>
+#include <stdexcept>
+#include <stack>
+
+template <typename T>
+class Node {
+public:
+    T data;
+    Node* pNext;
+    Node(T data) : data(data), pNext(nullptr) {}
+};
+
+template <typename T>
+class input_iterator;
+
+template <typename T>
+class fList {
+private:
+    Node<T>* head;
+
+public:
+    fList() : head(nullptr) {}
+    ~fList();
+
+    void push_front(const T& data);
+    void pop_front();
+    void insert(const T& data, int index);
+    Node<T>* begin() const;
+    Node<T>* end() const;
+};
+
+template <typename T>
+fList<T>::~fList() {
+    while (head != nullptr) {
+        pop_front();
+    }
+}
+
+template <typename T>
+void fList<T>::push_front(const T& data) {
+    Node<T>* pushed = new Node<T>(data);
+    pushed->pNext = head;
+    head = pushed;
+}
+
+template <typename T>
+void fList<T>::pop_front() {
+    if (head == nullptr) {
+        std::cerr << "no elements in list" << std::endl;
+    }
+    else {
+        Node<T>* popped = head;
+        head = head->pNext;
+        delete popped;
+    }
+}
+
+template <typename T>
+void fList<T>::insert(const T& data, int index) {
+    if (index < 0) {
+        throw std::out_of_range("Negative index");
+    }
+
+    if (index == 0) {
+        push_front(data);
+        return;
+    }
+
+    Node<T>* current = head;
+    for (int i = 0; i < index - 1; ++i) {
+        if (current == nullptr) {
+            std::cerr << "Can't insert out of range" << std::endl;
+            return;
+        }
+        current = current->pNext;
+    }
+
+    Node<T>* inserted = new Node<T>(data);
+    inserted->pNext = current->pNext;
+    current->pNext = inserted;
+}
+
+
+template <typename T>
+Node<T>* fList<T>::begin() const {
+    return head;
+}
+
+template <typename T>
+Node<T>* fList<T>::end() const {
+    return nullptr;
+}
+
+template <typename T>
+class input_iterator {
+private:
+    Node<T>* iptr;
+
+public:
+    input_iterator() : iptr(nullptr) {}
+    input_iterator(Node<T>* ptr) : iptr(ptr) {}
+
+    input_iterator& operator++() {
+        iptr = iptr->pNext;
+        return *this;
+    }
+
+    input_iterator operator++(int) {
+        input_iterator temp = *this;
+        iptr = iptr->pNext;
+        return temp;
+    }
+
+    input_iterator(const input_iterator& obj) : iptr(obj.iptr) {}
+
+    input_iterator& operator=(const input_iterator& obj) {
+        if (this != &obj) {
+            iptr = obj.iptr;
+        }
+        return *this;
+    }
+
+    T& operator*() const {
+        return iptr->data;
+    }
+
+    T* operator->() const {
+        return &(iptr->data);
+    }
+
+    bool operator==(const input_iterator& obj) const {
+        return iptr == obj.iptr;
+    }
+
+    bool operator!=(const input_iterator& obj) const {
+        return iptr != obj.iptr;
+    }
+
+    friend class fList<T>;
+};
+
+template <typename T>
+void Print(input_iterator<T> ii, const fList<T>& fl) {
+    for (ii = fl.begin(); ii != fl.end(); ++ii) {
+        std::cout << *ii << " ";
+    }
+}
+
+int main() {
+    fList<int> forward_list;
+    forward_list.push_front(1);
+    forward_list.push_front(2);
+    forward_list.push_front(3);
+    forward_list.push_front(4);
+
+    Print(input_iterator<int>(), forward_list);
+
+    return 0;
+}
