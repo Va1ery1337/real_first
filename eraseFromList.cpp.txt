@@ -1,0 +1,48 @@
+#include <iostream>
+#include <list>
+#include <iterator>
+#include <cmath>
+
+
+int ArithMid_List(std::list<int>& list) {
+    int sum = 0;
+    int c = 0;
+
+    for (std::list<int>::iterator it = list.begin(); it != list.end(); ++it) {
+        sum += *it;
+        c++;
+    }
+    
+    return sum / c;
+}
+
+void eraseFrom_List(std::list<int>& list) {
+    int checker = ArithMid_List(list);
+    for (std::list<int>::iterator it = list.begin(); it != list.end();) {
+        if (*it < checker) {
+            it = list.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+}
+
+void Print(std::list<int>& list) {
+    for (std::list<int>::iterator it = list.begin(); it != list.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+
+
+int main() {
+    
+    std::list<int> List = { 1,2,3,4,5,6,7,8,9 };
+    std::cout << "Arithmetic mid = "<<ArithMid_List(List)<<std::endl;
+    eraseFrom_List(List);
+    Print(List);
+
+
+    return 0;
+}
