@@ -1,0 +1,207 @@
+#include <iostream>
+#include <stdexcept>
+#include <initializer_list>
+
+template <typename T>
+class Vector {
+private:
+    T* elems = nullptr;
+    int size = 0;
+    int capacity = 0;
+public:
+    Vector() :elems(nullptr), size(0), capacity(0) {
+
+    }
+    ~Vector() {
+        delete[] elems;
+    }
+
+    Vector(std::initializer_list<T> init_list) {
+        size = init_list.size();
+        capacity = size;
+        elems = new T[capacity];
+        int indx = 0;
+        for (typename std::initializer_list<T>::iterator it = init_list.begin(); it != init_list.end(); ++it) {
+            elems[indx++] = *it;
+        }
+    }
+
+    bool empty() {
+        if (size == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    void resize(int new_capacity) {
+        T* new_elems = new T[new_capacity];
+        for (int i = 0; i < size; ++i) {
+            new_elems[i] = elems[i];
+        }
+        delete[]elems;
+        elems = new_elems;
+        capacity = new_capacity;
+    }
+
+    void insert(int index, const T& value) {
+        if (index > size || index < 0) {
+            throw std::out_of_range("Index out of range");
+        }
+        else {
+            if (capacity == size) {
+                if (capacity == 0) {
+                    resize(1);
+
+                }
+                else {
+                    resize(capacity * 2);
+                }
+            }
+            for (int i = size; i > index; --i) {
+                elems[i] = elems[i - 1];
+            }
+            elems[index] = value;
+            ++size;
+        }
+    }
+
+    void push_back(const T& value) {
+        if (size == capacity) {
+            if (capacity == 0) {
+                resize(1);
+            }
+            else {
+                resize(capacity * 2);
+            }
+        }
+        elems[size++] = value;
+    }
+
+    void push_front(const T& value) {
+        if (size == capacity) {
+            if (capacity == 0) {
+                resize(1);
+            }
+            else {
+                resize(capacity * 2);
+            }
+        }
+        for (int i = size; i > 0; --i) {
+            elems[i] = elems[i - 1];
+        }
+        elems[0] = value;
+        ++size;
+    }
+
+    void pop_back() {
+        if (size > 0) {
+            --size;
+        }
+        else {
+            std::cout << "empty vector" << std::endl;
+        }
+    }
+
+    void pop_front() {
+        if (size > 0) {
+            for (int i = 0; i < size - 1; ++i) {
+                elems[i] = elems[i + 1];
+            }
+            size--;
+        }
+        else {
+            std::cout << "empty vector" << std::endl;
+        }
+    }
+
+    void assign(int _size, const T& value) {
+        if (_size > capacity) {
+            resize(_size * 2);
+        }
+        size = _size;
+        for (int i = 0; i < size; ++i) {
+            elems[i] = value;
+        }
+    }
+
+    T& operator[](int index) {
+        if (index >= size || index < 0) {
+            throw std::out_of_range("Index out of range");
+        }
+        return elems[index];
+    }
+
+    void Print() {
+        for (int i = 0; i < size; ++i) {
+            std::cout << elems[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    T& front() {
+        if (empty()) {
+            std::cerr << "Empty vector" << std::endl;
+        }
+        return elems[0];
+    }
+
+    T& back() {
+        if (empty()) {
+            std::cerr << "Empty vector" << std::endl;
+        }
+        return elems[size-1];
+   }
+    int GetSize() {
+        return size;
+    }
+    int GetCapacity() {
+        return capacity;
+    }
+};
+
+template <typename T>
+class Stack {
+private:
+    Vector<T> vec;
+public:
+    Stack() {};
+    ~Stack() {};
+
+    void push(const T& value) {
+        vec.push_back(value);
+    }
+    void pop() {
+        if (vec.empty()) {
+            std::cerr << "Empty vector " << std::endl;
+        }
+        vec.pop_back();
+    }
+    T& top() {
+        if (vec.empty()) {
+            std::cerr << "Empty vector " << std::endl;
+        }
+        return vec.back();
+    }
+    bool empty() {
+        return vec.empty();
+    }
+
+};
+
+
+
+
+
+int main() {
+    
+    Stack<int> st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    while (!st.empty()) {
+        std::cout << st.top() << " ";
+        st.pop();
+    }
+    
+    return 0;
+}
