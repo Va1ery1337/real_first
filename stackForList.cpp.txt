@@ -1,0 +1,206 @@
+#include <iostream>
+#include <stdexcept>
+#include <initializer_list>
+
+template<typename T>
+class Node {
+
+public:
+    Node* pNext;
+    Node* pPrev;
+    T Data;
+    Node(T Data);
+
+
+};
+template<typename T>
+Node<T>::Node(T data) :pNext(nullptr), pPrev(nullptr), Data(data) {};
+
+template<typename T>
+class List {
+
+private:
+    Node<T>* head;
+    Node<T>* tail;
+public:
+    List();
+    ~List();
+    void push_front(const T& data);
+    void push_back(const T& data);
+    void pop_front();
+    void pop_back();
+    void Display();
+    bool empty() const;
+    T& back() const;
+    T& front() const;
+
+
+};
+
+template<typename T>
+List<T>::List() :head(nullptr), tail(nullptr) {};
+
+template<typename T>
+List<T>::~List() {
+
+}
+
+template<typename T>
+void List<T>::push_front(const T& data) {
+    Node<T>* pushed = new Node<T>(data);
+    if (head == nullptr) {
+
+        head = tail = pushed;
+    }
+    else {
+
+        head->pPrev = pushed;
+        pushed->pNext = head;
+        head = pushed;
+    }
+}
+
+template<typename T>
+void List<T>::push_back(const T& data) {
+    Node<T>* pushed = new Node<T>(data);
+    if (head == nullptr) {
+
+        head = tail = pushed;
+    }
+    else {
+
+        tail->pNext = pushed;
+        pushed->pPrev = tail;
+        tail = pushed;
+
+    }
+}
+
+template<typename T>
+void List<T>::pop_front() {
+    if (head == nullptr) {
+        std::cerr << "Empty List" << std::endl;
+    }
+    else {
+        Node<T>* poped = head;
+        if (head->pNext != nullptr) {
+            head = poped->pNext;
+            head->pPrev = nullptr;
+        }
+        else {
+            head = tail = nullptr;
+        }
+
+        delete poped;
+
+    }
+}
+
+template<typename T>
+void List<T>::pop_back() {
+    if (head == nullptr) {
+        std::cerr << "Empty List" << std::endl;
+    }
+    else {
+        Node<T>* poped = tail;
+        if (tail->pPrev != nullptr) {
+            tail = poped->pPrev;
+            tail->pNext = nullptr;
+        }
+        else {
+            head = tail = nullptr;
+        }
+
+        delete poped;
+    }
+}
+
+
+
+template<typename T>
+void List<T>::Display() {
+    if (head == nullptr and tail == nullptr) {
+        std::cerr << "Empty List" << std::endl;
+    }
+    else {
+        Node<T>* current = head;
+        while (current != nullptr) {
+            std::cout << current->Data << "->";
+            current = current->pNext;
+        }
+        delete current;
+        std::cout << std::endl;
+    }
+
+
+}
+
+template<typename T>
+bool List<T>::empty() const {
+    return head == nullptr;
+}
+
+template<typename T>
+T& List<T>::back() const {
+    if (tail != nullptr) {
+        return tail->Data;
+    }
+    else {
+        std::cerr << "Empty list" << std::endl;
+    }
+    
+}
+
+template<typename T>
+T& List<T>::front() const {
+    if (head != nullptr) {
+        return head->Data;
+    }
+    else {
+        std::cerr << "Empty list" << std::endl;
+    }
+}
+
+template <typename T>
+class Stack {
+private:
+    List<T> list;
+public:
+    Stack() {};
+    ~Stack() {};
+
+    void push(const T& value) {
+        list.push_back(value);
+    }
+    void pop() {
+        if (list.empty()) {
+            std::cerr << "Empty vector " << std::endl;
+        }
+        list.pop_back();
+    }
+    T& top() {
+        if (list.empty()) {
+            std::cerr << "Empty vector " << std::endl;
+        }
+        return list.back();
+    }
+    bool empty() {
+        return list.empty();
+    }
+
+};
+
+
+int main() {
+    
+    Stack<int> st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    while (!st.empty()) {
+        std::cout << st.top() << " ";
+        st.pop();
+    }
+    
+    return 0;
+}
