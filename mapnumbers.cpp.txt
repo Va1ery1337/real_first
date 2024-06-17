@@ -1,0 +1,44 @@
+#include <iostream>
+#include <stdexcept>
+#include <map>
+#include <string>
+
+std::map<int, std::string> Mymap = 
+{
+
+    {1,"one"},
+    {2, "two" },
+    {3, "three"},
+    {4, "four"},
+    {5, "five"},
+    {6, "six"},
+    {7, "seven"},
+    {8, "eight"},
+    {9, "nine"},
+    {0, "zero"},
+
+
+};
+
+std::string foo(int a) {
+    auto it = Mymap.find(a);
+    if (it != Mymap.end()) {
+        return it->second;
+    }
+    else {
+        std::cerr << "number not found" << std::endl;
+    }
+}
+
+
+int main() {
+    
+    std::cout<<foo(0)<<std::endl;
+    std::cout << foo(1)<<std::endl;
+    std::cout << foo(15)<<std::endl;
+   
+
+
+    
+    return 0;
+}
