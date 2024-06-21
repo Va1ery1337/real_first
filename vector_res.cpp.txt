@@ -1,0 +1,187 @@
+#include <iostream>
+#include <stdexcept>
+#include <initializer_list>
+
+
+template <typename T>
+class Vector {
+private:
+    T* elems = nullptr;
+    int size = 0;
+    int capacity = 0;
+public:
+    Vector() :elems(nullptr), size(0), capacity(0) {
+
+    }
+    ~Vector() {
+        delete[] elems;
+    }
+
+    Vector(std::initializer_list<T> init_list) : size(init_list.size()), capacity(init_list.size()) {
+        elems = new T[capacity];
+        int index = 0;
+        for (const T& elem : init_list) {
+            elems[index++] = elem;
+        }
+    }
+
+    void reserve(int new_capacity) {
+        if (new_capacity > capacity) {
+            T* new_elems = new T[new_capacity];
+            for (int i = 0; i < size; ++i) {
+                new_elems[i] = elems[i];
+            }
+            delete[] elems;
+            elems = new_elems;
+            capacity = new_capacity;
+        }
+    }
+
+    void resize(int new_size) {
+        if (new_size > size) {
+            reserve(new_size);
+            for (int i = size; i < new_size; ++i) {
+                elems[i] = T();
+            }
+        }
+        size = new_size;
+    }
+
+    void resize(int new_size, const T& data) {
+        if (new_size > size) {
+            reserve(new_size);
+            for (int i = size; i < new_size; ++i) {
+                elems[i] = data;
+            }
+        }
+        size = new_size;
+    }
+
+    void insert(int index, const T& value) {
+        if (index > size || index < 0) {
+            throw std::out_of_range("Index out of range");
+        }
+        else {
+            if (capacity == size) {
+                if (capacity == 0) {
+                    resize(1);
+
+                }
+                else {
+                    resize(capacity * 2);
+                }
+            }
+            for (int i = size; i > index; --i) {
+                elems[i] = elems[i - 1];
+            }
+            elems[index] = value;
+            ++size;
+        }
+    }
+
+    void push_back(const T& value) {
+        if (size == capacity) {
+            if (capacity == 0) {
+                resize(1);
+            }
+            else {
+                resize(capacity * 2);
+            }
+        }
+        elems[size++] = value;
+    }
+
+    void push_front(const T& value) {
+        if (size == capacity) {
+            if (capacity == 0) {
+                resize(1);
+            }
+            else {
+                resize(capacity * 2);
+            }
+        }
+        for (int i = size; i > 0; --i) {
+            elems[i] = elems[i - 1];
+        }
+        elems[0] = value;
+        ++size;
+    }
+
+    void pop_back() {
+        if (size > 0) {
+            --size;
+        }
+        else {
+            std::cout << "empty vector" << std::endl;
+        }
+    }
+
+    void pop_front() {
+        if (size > 0) {
+            for (int i = 0; i < size - 1; ++i) {
+                elems[i] = elems[i + 1];
+            }
+            size--;
+        }
+        else {
+            std::cout << "empty vector" << std::endl;
+        }
+    }
+
+    void assign(int _size, const T& value) {
+        if (_size > capacity) {
+            resize(_size * 2);
+        }
+        size = _size;
+        for (int i = 0; i < size; ++i) {
+            elems[i] = value;
+        }
+    }
+
+    T& operator[](int index) {
+        if (index >= size || index < 0) {
+            throw std::out_of_range("Index out of range");
+        }
+        return elems[index];
+    }
+
+    void Print() {
+        for (int i = 0; i < size; ++i) {
+            std::cout << elems[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    int GetSize() {
+        return size;
+    }
+    int GetCapacity() {
+        return capacity;
+    }
+
+
+
+
+
+
+};
+
+
+int main(int argc, char* argv[]) {
+
+    Vector<int> vec;
+    vec.assign(5, 111);
+    vec.Print();
+    std::cout << vec.GetSize() << std::endl;
+    std::cout << vec.GetCapacity() << std::endl;
+    vec.resize(2);
+    vec.Print();
+    vec.resize(7, 777);
+    vec.Print();
+
+
+
+
+
+    return 0;
+}
