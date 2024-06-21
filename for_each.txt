@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+#include <functional>
+
+template <typename InputIt, typename UnaryFunction>
+UnaryFunction my_for_each(InputIt first, InputIt last, UnaryFunction f) {
+    for (; first != last; ++first) {
+        f(*first);
+    }
+    return f;
+}
+
+void print(int n) {
+    std::cout << n << " ";
+}
+
+template<typename T>
+void Triple(T& n) {
+    n = n * 3;
+}
+
+int main() {
+    std::vector<int> v = { 1, 2, 3, 4, 5 };
+    my_for_each(v.begin(), v.end(), Triple<int>);
+    my_for_each(v.begin(), v.end(), print);
+    std::cout << std::endl;
+
+    return 0;
+}
