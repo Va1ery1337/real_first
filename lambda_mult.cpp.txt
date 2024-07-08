@@ -1,0 +1,12 @@
+#include <iostream>
+#include <functional>
+
+std::function<int(int)> mult(int x) {
+    return [x](int y) { return x * y; };
+}
+
+int main() {
+    
+    std::cout << mult(5)(6) << std::endl;  
+    return 0;
+}
