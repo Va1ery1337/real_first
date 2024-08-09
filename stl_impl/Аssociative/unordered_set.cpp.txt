@@ -1,0 +1,107 @@
+#include <iostream>
+#include <vector>
+
+template<typename T>
+class UnorderedSet {
+public:
+    UnorderedSet(size_t bucket_count = 16)
+        : size_(0), bucket_count_(bucket_count) {
+        buckets.resize(bucket_count_);
+    }
+
+    
+    void reserve(size_t new_bucket_count) {
+        if (new_bucket_count > bucket_count_) {
+            std::vector<std::vector<T>> new_buckets(new_bucket_count);
+            for (const auto& bucket : buckets) {
+                for (const auto& elem : bucket) {
+                    size_t new_index = elem % new_bucket_count;
+                    new_buckets[new_index].push_back(elem);
+                }
+            }
+            buckets = std::move(new_buckets);
+            bucket_count_ = new_bucket_count;
+        }
+    }
+
+
+    
+    UnorderedSet& operator=(const UnorderedSet& other) {
+        if (this != &other) {
+            bucket_count_ = other.bucket_count_;
+            size_ = other.size_;
+            buckets = other.buckets;
+        }
+        return *this;
+    }
+
+    bool insert(const T& value) {
+        size_t index = getBucketIndex(value);
+        for (const auto& elem : buckets[index]) {
+            if (elem == value) {
+                return false; 
+            }
+        }
+        buckets[index].push_back(value);
+        ++size_;
+        return true;
+    }
+
+    bool erase(const T& value) {
+        size_t index = getBucketIndex(value);
+        auto& bucket = buckets[index];
+        for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+            if (*it == value) {
+                bucket.erase(it);
+                --size_;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool contains(const T& value) const {
+        size_t index = getBucketIndex(value);
+        for (const auto& elem : buckets[index]) {
+            if (elem == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    size_t size() const {
+        return size_;
+    }
+
+private:
+    std::vector<std::vector<T>> buckets;
+    size_t size_;
+    size_t bucket_count_;
+
+    
+    size_t getBucketIndex(const T& value) const {
+        return value % bucket_count_;
+    }
+};
+
+int main() {
+    UnorderedSet<int> uset;
+
+    uset.insert(10);
+    uset.insert(20);
+    uset.insert(30);
+
+    std::cout << "Contains 20: " << uset.contains(20) << "\n";
+    std::cout << "Contains 40: " << uset.contains(40) << "\n";
+
+    uset.erase(20);
+    std::cout << "Contains 20 after erase: " << uset.contains(20) << "\n";
+
+    uset.reserve(32);
+
+    UnorderedSet<int> uset2 = uset;
+    std::cout << "Contains 40 in uset2: " << uset2.contains(40) << "\n";
+
+    return 0;
+}

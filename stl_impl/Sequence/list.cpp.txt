@@ -1,0 +1,347 @@
+#include <iostream>
+#include <initializer_list>
+#include <exception>
+
+template<typename T>
+struct Node
+{
+    T data;
+    Node* next;
+    Node* prev;
+
+    Node(T data) : data(data), next(nullptr), prev(nullptr){}
+
+    ~Node(){}
+};
+
+template<typename T>
+class List
+{
+    Node<T>* head;
+    Node<T>* tail;
+public:
+    class Iterator
+    {
+    private:
+        Node<T>* current;
+    public:
+
+        
+        Iterator(Node<T>* node) :current(node){}
+        
+        ~Iterator() {}
+
+        
+        T& operator*() const
+        {
+            return current->data;
+        }
+
+        
+        T* operator->() const
+        {
+            return &(current->data);
+        }
+
+        Iterator& operator++()
+        {
+            if (current) current = current->next;
+            return *this;
+        }
+
+        Iterator operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        Iterator& operator--()
+        {
+            if (current) current = current->prev;
+            return *this;
+        }
+
+        Iterator operator--(int)
+        {
+            Iterator tmp = *this;
+            --(*this);
+            return tmp;
+        }
+
+        
+        bool operator==(const Iterator& other) const
+        {
+            return current == other.current;
+        }
+
+        
+        bool operator!=(const Iterator& other) const
+        {
+            return current != other.current;
+        }
+
+        Iterator begin() const
+        {
+            return Iterator(head);
+        }
+
+        Iterator end() const
+        {
+            return Iterator(nullptr);
+        }
+    };
+
+
+
+    List() : head(nullptr), tail(nullptr){}
+ 
+    List<T>(std::initializer_list<T> init_list) : head(nullptr), tail(nullptr)
+    {
+        for (auto elem : init_list)
+        {
+            push_back(elem);
+        }
+    }
+
+
+   ~List()
+    {
+        Node<T>* current = head;
+        while (current != nullptr)
+        {
+            Node<T>* temp = current;
+            current = current->next;
+            delete temp;
+            if (current == head)
+            {
+                break;
+            }
+        }
+        head = nullptr;
+    }
+
+    List(const List& other) : head(nullptr), tail(nullptr)
+    {
+        if (other.head)
+        {
+            head = new Node<T>(other.head->data);
+
+            Node<T>* current = head;
+            Node<T>* otherCurrent = other.head;
+            while (otherCurrent)
+            {
+                current->next = new Node<T>(otherCurrent->data);
+                otherCurrent = otherCurrent->next;
+                current = current->next;
+            }
+            tail = current;
+        }
+    }
+
+    
+    List<T>& operator=(const List& other)
+    {
+        if (this != &other)
+        {
+            while (head != nullptr)
+            {
+                Node<T>* temp = head;
+                head = head->next;
+                delete temp;
+            }
+            if (other.head)
+            {
+                head = new Node<T>(other.head->data);
+
+                Node<T>* current = head;
+                Node<T>* otherCurrent = other.head;
+                while (otherCurrent)
+                {
+                    current->next = new Node<T>(otherCurrent->data);
+                    otherCurrent = otherCurrent->next;
+                    current = current->next;
+                }
+
+                tail = current;
+
+            }
+        }
+        return *this;
+    }
+
+    List(List&& other) : head(other.head), tail(other.tail)
+    {
+        other.head = nullptr;
+        other.tail = nullptr;
+    }
+
+    
+    List<T>& operator=(List&& other)
+    {
+        if (this != &other)
+        {
+            while (head != nullptr)
+            {
+                Node<T>* temp = head;
+                head = head->next;
+                delete temp;
+            }
+            head = other.head;
+            tail = other.tail;
+            other.head = nullptr;
+            other.tail = nullptr;
+        }
+        return *this;
+    }
+
+
+    
+    void push_front(const T& val)
+    {
+        Node<T>* newNode = new Node<T>(val);
+        if (head == nullptr)
+        {
+            head = newNode;
+            tail = head;
+        }
+        else
+        {
+            newNode->next = head;
+            head->prev = newNode;
+            head = newNode;
+        }
+    }
+
+    
+    void pop_front()
+    {
+        if (head == nullptr)
+        {
+            return;
+        }
+        Node<T>* temp = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete temp;
+        temp = nullptr;
+    }
+
+    
+    void push_back(const T& val)
+    {
+        Node<T>* newNode = new Node<T>(val);
+        if (head == nullptr)
+        {
+            head = newNode;
+            tail = head;
+        }
+        else
+        {
+            newNode->prev = tail;
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    
+    void pop_back()
+    {
+        if (head == nullptr)
+        {
+            return;
+        }
+        Node<T>* temp = tail;
+        tail = tail->prev;
+        tail->next = nullptr;
+        delete temp;
+        temp = nullptr;
+    }
+
+    
+    void insert(const T& val, int n)
+    {
+        if (n < 0)
+        {
+            return;
+        }
+
+        if (n == 0)
+        {
+            push_front(val);
+            return;
+        }
+
+        Node<T>* temp = head;
+        for (int i = 0; i < n - 1; ++i)
+        {
+            if (temp == nullptr)
+            {
+                return;
+            }
+            temp = temp->next;
+        }
+        if (temp == tail)
+        {
+            push_back(val);
+            return;
+        }
+
+        Node<T>* newNode = new Node<T>(val);
+        newNode->next = temp->next;
+        if (temp->next != nullptr) {
+            temp->next->prev = newNode;
+        }
+        newNode->prev = temp;
+        temp->next = newNode;
+    }
+
+    
+    T& front()
+    {
+        if (!head)
+        {
+            throw std::out_of_range("List is empty");
+        }
+        return head->data;
+    }
+
+    
+    T& back()
+    {
+        if (!tail)
+        {
+            throw std::out_of_range("List is empty");
+        }
+        return tail->data;
+    }
+
+    
+    bool empty()
+    {
+        return head == nullptr;
+    }
+
+
+    
+    void Display() const
+    {
+        Node<T>* current = head;
+        while (current != nullptr)
+        {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+    }
+
+   
+};
+
+
+
+int main()
+{
+    List<int> list = {111,222,333,444};
+    list.Display();
+    return 0;
+}

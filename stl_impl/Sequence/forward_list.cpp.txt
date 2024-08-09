@@ -1,0 +1,195 @@
+#include <iostream>
+#include <initializer_list>
+
+
+template<typename T>
+class Node
+{
+public:
+    T data;
+    Node* next;
+
+    Node(T data) : data(data), next(nullptr)
+    {
+
+    }
+    ~Node()
+    {
+
+    }
+
+};
+
+
+template<typename T>
+class ForwardList
+{
+    Node<T>* head;
+public:
+    
+    ForwardList() :head(nullptr){}
+    
+    ForwardList(std::initializer_list<T> init) : head(nullptr)
+    {
+        for (auto elem : init)
+        {
+            push_front(elem);
+        }
+        Reverse();
+    }
+
+    ~ForwardList()
+    {
+        while (head != nullptr)
+        {
+            Node<T>* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    ForwardList(const ForwardList& other)
+    {
+        if (other.head)
+        {
+            head = new Node<T>(other.head->data);
+
+            Node<T>* current = head;
+            Node<T>* otherCurrent = other.head;
+            while (otherCurrent)
+            {
+                current->next = new Node<T>(otherCurrent->data);
+                otherCurrent = otherCurrent->next;
+                current = current->next;
+            }
+        }
+    }
+
+    
+    ForwardList<T>& operator=(const ForwardList& other)
+    {
+        if (this != &other)
+        {
+            while (head != nullptr)
+            {
+                Node<T>* temp = head;
+                head = head->next;
+                delete temp;
+            }
+            if (other.head)
+            {
+                head = new Node<T>(other.head->data);
+
+                Node<T>* current = head;
+                Node<T>* otherCurrent = other.head;
+                while (otherCurrent)
+                {
+                    current->next = new Node<T>(otherCurrent->data);
+                    otherCurrent = otherCurrent->next;
+                    current = current->next;
+                }
+            }
+        }
+        return *this;
+    }
+
+    ForwardList(ForwardList&& other) : head(other.head)
+    {
+        other.head = nullptr;
+    }
+
+    
+    ForwardList<T>& operator=(ForwardList&& other)
+    {
+        if (this != &other)
+        {
+            while (head != nullptr)
+            {
+                Node<T>* temp = head;
+                head = head->next;
+                delete temp;
+            }
+
+            head = other.head;
+            other.head = nullptr;
+        }
+        return *this;
+    }
+
+    
+    void push_front(const T& val)
+    {
+        Node<T>* newNode = new Node<T>(val);
+        newNode->next = head;
+        head = newNode;
+    }
+
+    
+    void pop_front()
+    {
+        if (head == nullptr)
+        {
+            return;
+        }
+        Node<T>* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    
+    void Reverse()
+    {
+        if (head == nullptr || head->next == nullptr)
+        {
+            return;
+        }
+        Node<T>* prev = nullptr;
+        Node<T>* curr = head;
+        Node<T>* foll = nullptr;
+
+        while (curr != nullptr)
+        {
+            foll = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = foll;
+        }
+        head = prev;
+
+    }
+
+    
+    bool empty()
+    {
+        return head == nullptr;
+    }
+
+    
+    T front()
+    {
+        return head->data;
+    }
+
+    
+    
+    void Display() const
+    {
+        Node<T>* current = head;
+        while (current != nullptr)
+        {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+    }
+
+};
+
+
+
+
+int main()
+{
+    ForwardList<int> list = {111,222,333};
+    list.Display();
+    return 0;
+}

@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+template<typename T>
+class PriorityQueue {
+private:
+    std::vector<T> container;  
+
+    
+    void sortContainer() {
+        std::sort(container.begin(), container.end(), std::greater<T>());  
+    }
+
+public:
+   
+    void push(const T& value) {
+        container.push_back(value);
+        sortContainer();  
+    }
+
+    
+    void pop() {
+        if (!container.empty()) {
+            container.erase(container.begin());  
+        }
+    }
+
+  
+    T& top() {
+        return container.front();  
+    }
+
+   
+    bool empty() const {
+        return container.empty();
+    }
+
+    
+    size_t size() const {
+        return container.size();
+    }
+};
+
+int main() {
+
+    PriorityQueue<int> priorityQueue;  
+
+    
+    priorityQueue.push(10);
+    priorityQueue.push(30);
+    priorityQueue.push(20);
+    priorityQueue.push(5);
+
+    
+    std::cout << "Top element: " << priorityQueue.top() << std::endl; 
+
+    
+    std::cout << "Top element after pop: " << priorityQueue.top() << std::endl; 
+
+    
+    std::cout << "Priority queue size: " << priorityQueue.size() << std::endl;  
+
+    std::cout << "Is priority queue empty? " << (priorityQueue.empty() ? "Yes" : "No") << std::endl; 
+
+   
+
+    return 0;
+}
+

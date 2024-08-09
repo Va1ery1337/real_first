@@ -1,0 +1,153 @@
+#include <iostream>
+#include <stdexcept>
+#include <map>
+#include <string>
+#include <queue>
+#include <stack>
+
+template <typename T>
+class Node {
+public:
+    Node* left;
+    Node* right;
+    T data;
+
+    Node(T val) : data(val), left(nullptr), right(nullptr) {}
+};
+
+template <typename T>
+class Tree {
+private:
+    Node<T>* root;
+
+    void insertHelper(Node<T>*& node, T key);
+    void inorderHelper(Node<T>* node);
+    void preorderHelper(Node<T>* node);
+    void postorderHelper(Node<T>* node);
+    
+
+public:
+    Tree() : root(nullptr) {}
+
+    void insert(T key);
+    void inorder();
+    void preorder();
+    void postorder();
+    void levelOrder();
+};
+
+template <typename T>
+void Tree<T>::insertHelper(Node<T>*& node, T key) {
+    if (node == nullptr) {
+        node = new Node<T>(key);
+        return;
+    }
+
+    if (key < node->data) {
+        insertHelper(node->left, key);
+    }
+    else {
+        insertHelper(node->right, key);
+    }
+}
+
+template <typename T>
+void Tree<T>::insert(T key) {
+    insertHelper(root, key);
+}
+
+template <typename T>
+void Tree<T>::inorderHelper(Node<T>* node) {
+    if (node == nullptr) {
+        return;
+    }
+    inorderHelper(node->left);
+    std::cout << node->data << " ";
+    inorderHelper(node->right);
+}
+
+template <typename T>
+void Tree<T>::inorder() {
+    std::cout << "Inorder traversal: ";
+    inorderHelper(root);
+    std::cout << std::endl;
+}
+
+template <typename T>
+void Tree<T>::preorderHelper(Node<T>* node) {
+    if (node == nullptr) {
+        return;
+    }
+    std::cout << node->data << " ";
+    preorderHelper(node->left);
+    preorderHelper(node->right);
+}
+
+template <typename T>
+void Tree<T>::preorder() {
+    std::cout << "Preorder traversal: ";
+    preorderHelper(root);
+    std::cout << std::endl;
+}
+
+template <typename T>
+void Tree<T>::postorderHelper(Node<T>* node) {
+    if (node == nullptr) {
+        return;
+    }
+    postorderHelper(node->left);
+    postorderHelper(node->right);
+    std::cout << node->data << " ";
+}
+
+template <typename T>
+void Tree<T>::postorder() {
+    std::cout << "Postorder traversal: ";
+    postorderHelper(root);
+    std::cout << std::endl;
+}
+
+template <typename T>
+void Tree<T>::levelOrder() {
+    if (root == nullptr) {
+        return;
+    }
+
+    std::queue<Node<T>*> q;
+    q.push(root);
+
+    std::cout << "Level Order traversal: ";
+    while (!q.empty()) {
+        Node<T>* current = q.front();
+        q.pop();
+        std::cout << current->data << " ";
+
+        if (current->left != nullptr) {
+            q.push(current->left);
+        }
+        if (current->right != nullptr) {
+            q.push(current->right);
+        }
+    }
+    std::cout << std::endl;
+}
+
+
+int main() {
+    Tree<int> MyTree;
+
+    MyTree.insert(7);
+    MyTree.insert(3);
+    MyTree.insert(2);
+    MyTree.insert(5);
+    MyTree.insert(10);
+    MyTree.insert(12);
+    
+
+    MyTree.inorder();
+    MyTree.preorder();
+    MyTree.postorder();
+    MyTree.levelOrder();
+
+    return 0;
+}

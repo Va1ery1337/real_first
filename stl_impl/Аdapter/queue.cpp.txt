@@ -1,0 +1,56 @@
+#include <iostream>
+#include <list>
+
+template<typename T>
+class Queue {
+private:
+    std::list<T> container;
+
+public:
+    
+    void push(const T& value) {
+        container.push_back(value);
+    }
+
+    
+    void pop() {
+        if (!container.empty()) {
+            container.pop_front();
+        }
+    }
+
+    
+    T& front() {
+        return container.front();
+    }
+
+    
+    bool empty() const {
+        return container.empty();
+    }
+
+    
+    size_t size() const {
+        return container.size();
+    }
+};
+
+int main() {
+
+    Queue<int> queue;
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+
+    
+    std::cout << "Front element: " << queue.front() << std::endl;  
+
+   
+    queue.pop();
+    std::cout << "Front element after pop: " << queue.front() << std::endl;  
+
+   
+    std::cout << "Queue size: " << queue.size() << std::endl;  
+
+    return 0;
+}

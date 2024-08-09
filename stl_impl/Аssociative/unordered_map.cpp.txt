@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <utility>
+
+template<typename Key, typename Value>
+class UnorderedMap {
+public:
+    UnorderedMap(size_t bucket_count = 16)
+        : size_(0), bucket_count_(bucket_count) {
+        buckets.resize(bucket_count_);
+    }
+
+    void reserve(size_t new_bucket_count) {
+        if (new_bucket_count > bucket_count_) {
+            std::vector<std::vector<std::pair<Key, Value>>> new_buckets(new_bucket_count);
+            for (const auto& bucket : buckets) {
+                for (const auto& elem : bucket) {
+                    size_t new_index = elem.first % new_bucket_count;
+                    new_buckets[new_index].push_back(elem);
+                }
+            }
+            buckets = std::move(new_buckets);
+            bucket_count_ = new_bucket_count;
+        }
+    }
+
+    template<typename K, typename V>
+    bool emplace(K&& key, V&& value) {
+        return insert(std::forward<K>(key), std::forward<V>(value));
+    }
+
+    UnorderedMap& operator=(const UnorderedMap& other) {
+        if (this != &other) {
+            bucket_count_ = other.bucket_count_;
+            size_ = other.size_;
+            buckets = other.buckets;
+        }
+        return *this;
+    }
+
+    bool insert(const Key& key, const Value& value) {
+        size_t index = getBucketIndex(key);
+        for (auto& elem : buckets[index]) {
+            if (elem.first == key) {
+                elem.second = value;
+                return false;
+            }
+        }
+        buckets[index].push_back({ key, value });
+        ++size_;
+        return true;
+    }
+
+    bool erase(const Key& key) {
+        size_t index = getBucketIndex(key);
+        auto& bucket = buckets[index];
+        for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+            if (it->first == key) {
+                bucket.erase(it);
+                --size_;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Value* find(const Key& key) {
+        size_t index = getBucketIndex(key);
+        for (auto& elem : buckets[index]) {
+            if (elem.first == key) {
+                return &elem.second;
+            }
+        }
+        return nullptr;
+    }
+
+    size_t size() const {
+        return size_;
+    }
+
+private:
+    std::vector<std::vector<std::pair<Key, Value>>> buckets;  
+    size_t size_;
+    size_t bucket_count_;
+
+    
+    size_t getBucketIndex(const Key& key) const {
+        return key % bucket_count_;
+    }
+};
+
+int main() {
+
+    UnorderedMap<int, std::string> umap;
+
+    umap.insert(10, "Ten");
+    umap.insert(20, "Twenty");
+    umap.insert(30, "Thirty");
+
+    auto val = umap.find(20);
+    if (val) {
+        std::cout << "Key 20 has value: " << *val << "\n";
+    }
+
+    umap.erase(20);
+    val = umap.find(20);
+    if (!val) {
+        std::cout << "Key 20 not found after erase\n";
+    }
+
+    
+    umap.reserve(32);
+
+    
+    umap.emplace(40, "Forty");
+    val = umap.find(40);
+    if (val) {
+        std::cout << "Key 40 has value: " << *val << "\n";
+    }
+
+    
+    UnorderedMap<int, std::string> umap2 = umap;
+    val = umap2.find(40);
+    if (val) {
+        std::cout << "Key 40 in umap2 has value: " << *val << "\n";
+    }
+
+    return 0;
+}
